@@ -33,16 +33,16 @@
 # testo.split('\\n\\n')   | Paragrafi (separati da riga vuota)
 
 # ===============================
-#   Regex Patterns
+#   CONFIGURAZIONE E COSTANZI
 # ===============================
-
-# REGEX_TUTTI_CARATTERI = r'.'           # Tutti i caratteri (usare con re.DOTALL)
-# REGEX_SENZA_SPAZI = r'\S'              # Caratteri esclusi gli spazi
-# REGEX_SOLO_LETTERE = r'[a-zA-ZÀ-ÿ]'   # Solo lettere, incluse accentate
-# REGEX_PAROLE = r'\w+'                  # Parole (lettere, numeri, underscore)
-# REGEX_PAROLE_LETTERE = r'[a-zA-ZÀ-ÿ]+' # Parole composte solo da lettere
-# REGEX_FRASI = r'[^.!?]+[.!?]+'         # Frasi terminate da . ! ?
-
+"""
+REGEX_TUTTI_CARATTERI = r'.'           # Tutti i caratteri (usare con re.DOTALL)
+REGEX_SENZA_SPAZI = r'\S'              # Caratteri esclusi gli spazi
+REGEX_SOLO_LETTERE = r'[a-zA-ZÀ-ÿ]'   # Solo lettere, incluse accentate
+REGEX_PAROLE = r'\w+'                  # Parole (lettere, numeri, underscore)
+REGEX_PAROLE_LETTERE = r'[a-zA-ZÀ-ÿ]+' # Parole composte solo da lettere
+REGEX_FRASI = r'[^.!?]+[.!?]+'         # Frasi terminate da . ! ?
+"""
 
 # ===============================
 #   TODO 
@@ -52,42 +52,20 @@
 # 2. Unificare gestione stream e buffer dati 
 # 3. Suddividere in moduli
 
-# ===============================
-#   Repository
-# =============================== 
 
-from typing import TextIO
-
-def get_file_content(file_path: str) -> TextIO:
-    """Restituisce un oggetto TextIO con il contenuto del file specificato"""
-    if not file_path:
-        raise ValueError("Il file path non può essere vuoto!")
-    try:
-        with open(file_path, "r") as f:
-            return f.read()
-    except FileNotFoundError:
-        raise FileNotFoundError ("Il file non esiste")
     
-
-# ===============================
-#   Services
-# =============================== 
-
-def stampa_testo_input(text: TextIO) -> None:
-    with text as f:
-        content = f.read()
-        print(content)
-
-import re
-
-def get_text_len_no_space(text: str) -> int:
-    print(len(re.findall(r'\S', text)))
+from ui.console import print_risultato
+from data.services import get_caratteri_len,get_phrase_number,get_text_len_no_space,get_words_numers
+from data.repository import get_file_content
 
 def main() -> None:
     try:
         content: str = get_file_content("text.txt")
-        print(content)
-    
+        print_risultato(get_caratteri_len(content), "caratteri")
+        print_risultato(get_text_len_no_space(content), "caratteri senza spazi")
+        print_risultato(get_words_numers(content), "parole")
+        print_risultato(get_phrase_number(content), "frasi")
+
     except ValueError as e:
         print (f"{e}")
     
@@ -101,5 +79,5 @@ def main() -> None:
         print("fine try catch")
 
 
-main()
-
+if __name__=="__main__":
+    main()
